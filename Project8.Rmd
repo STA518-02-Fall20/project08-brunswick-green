@@ -1,0 +1,106 @@
+---
+title: "Project 8"
+author: "brunswick-green"
+output: github_document
+---
+
+```{r load_packages}
+library(tidyverse)
+cereal <- read_csv("data/cereal.csv")
+iris
+```
+
+**cereal = Nutritional and Marketing Information on US Cereals**
+[Link to Variable Description](https://www.kaggle.com/crawford/80-cereals?select=cereal.csv)
+
+### Numerical Summaries
+
+```{r exploratory}
+summary(cereal)
+```
+
+### Renaming
+
+```{r renaming}
+#cereal %>%
+  #rename.values(mfr, G = "G")
+```
+
+
+## Nutritionals
+
+### Calories
+
+```{r calories}
+cereal %>% 
+  ggplot() +
+    geom_histogram(mapping = aes(x = calories, fill = mfr), position = "stack") +
+    labs(fill = "Manufacturer", 
+         title = "Distribution of calories",
+         x = "Calories",
+         y = "Count") 
+```
+
+### Sugars
+
+```{r sugar_mfr}
+cereal %>%
+ggplot() +
+  geom_col(mapping = aes(x = mfr, y = sugars)) +
+  labs(title = "Sugars per Manufacturer",
+       y = "Average Sugars",
+       x = "Manufacturer") 
+```
+
+```{r sugar_cereal}
+cereal %>%
+ggplot() +
+  geom_col(mapping = aes(x = name , y = sugars), color = "white") +
+  theme(text = element_text(size=5)) +
+  labs(title = "Sugars",
+       subtitle = "by Cereal",
+       x = "Name",
+       y = "Sugars" ) +
+  coord_flip(xlim = NULL, ylim = NULL, expand = FALSE, clip = "on")
+```
+
+```{r sugarshelf}
+cereal %>%
+ggplot() +
+  geom_col(mapping = aes(x = name, y = sugars)) +
+  facet_grid(cereal$shelf~.) +
+  theme(text = element_text(size=5),
+        axis.text.x = element_text(angle=90, hjust=1))+
+  labs(title = "Sugars per Cereal",
+       subtitle = "By Shelf Number",
+       x = "Name of Cereal",
+       y = "Sugars per Serving" )
+```
+
+## Serving Size, By Manufacturer
+
+```{r sugarcup}
+cereal %>%
+ggplot() +
+  geom_col(mapping = aes(x = cups, y = sugars)) +
+  facet_grid(mfr~.) +
+  labs(title = "Sugars per Cup",
+       subtitle = "By Manufacturer",
+       x = "Cups",
+       y = "Sugars" )
+```
+
+## Ratings by Manufacturer
+
+```{r mfr_rating}
+cereal %>%
+ggplot() +
+  geom_col(mapping = aes(x = mfr, y = rating)) +
+  facet_grid(type~.) +
+  labs(title = "Rating",
+       subtitle = "By Manufacturer",
+       x = "Manufacturer",
+       y = "Rating" )
+```
+
+
